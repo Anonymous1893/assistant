@@ -1,0 +1,20 @@
+{
+	"actions": [
+		{
+			"name" : "MAIN",
+			"intent" : {
+				"name" : "actions.intent.MAIN"
+			},
+			"fulfillment" : {
+				"conversationName" : "repeat"
+			}			
+		}
+	],
+	"conversations" : {
+		"repeat" : {
+			"name" : "repeat",
+			"url" : "https://us-central1-test-816ce.cloudfunctions.net/actions",
+			"fulfillmentApiVersion" : 2
+		}
+	}
+}
