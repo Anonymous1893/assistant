@@ -9,6 +9,20 @@ const functions = require('firebase-functions');
 
 "use strict";
 
+//[{
+//	"ask" : str Question,
+//	str Reply : int NextIndex
+//}]
+const story = [
+	{
+		"ask:" : "You can go into the forest or take the clear road",
+		"forest" : "",
+		"open road" : ""
+	}
+]
+
+
+
 const ActionsSdkApp = require("actions-on-google").ActionsSdkApp;
 
 const NO_INPUTS = [
