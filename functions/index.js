@@ -19,9 +19,11 @@ const story = [
 		"forest" : "",
 		"open road" : ""
 	}
-]
+];
 
-
+const test = [
+	"0","1","2","3","4","5","6","7","8","9"
+];
 
 const ActionsSdkApp = require("actions-on-google").ActionsSdkApp;
 
@@ -29,27 +31,51 @@ const NO_INPUTS = [
 	"Sorry, what was that?",
 	"I didn't quite catch that",
 	"What?"
-]
+];
+
+let i = 0;
+let youme = "";
+let youFound = false;
+let index = 0;
 
 exports.actions = functions.https.onRequest((req,res) => {
-	const app = new ActionsSdkApp({request: req, response: res});
+	const app  = new ActionsSdkApp({request: req, response: res});
+	let input  = app.getRawInput().toLowerCase();
+	let output = "";
 	
 	function mainIntent(app) {
-		let inputPrompt = app.buildInputPrompt(true, '<speak>Hi! <break time="1"/> ' +
-			'I can read out an ordinal like ' +
-			'<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>', NO_INPUTS); 
-		
-		app.ask(inputPrompt);
+		output = app.buildInputPrompt(true, 'Hello, my name is Eliza. What would you like to talk about?', NO_INPUTS); 
+		app.ask(output);
 	}
 	
 	function rawInput(app){
-		if (app.getRawInput() === "bye") {
-			app.teel("Googbye");
+		if (input.indexOf("go away") !== -1) {
+			app.tell("I hope I helped!");
+		} else if (input.includes("feel")) {
+			//~ let inputPrompt = app.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' + 
+				//~ app.getRawInput() + '</say-as></speak>', NO_INPUTS);
+			output = app.buildInputPrompt(true, "Do you often feel that way?", NO_INPUTS);
+		} else if (input.indexOf("i am") !== -1) {
+			index = input.indexOf("i am");
+			output = "How long have you been" + input.substring(index+4) + "?";
+		} else if (input.includes("you") && input.includes("me") && input.indexOf("you") < input.indexOf("me")){
+			input = input.split(" ");
+			output = "What makes you think I ";
+			input.forEach( function(word){
+				if (word === "you") {
+					youFound = true;
+				} else if (youFound) {
+					if (word !== "me") {
+						output += word + " ";
+					}
+				}
+			});
+			ouput += "?";
 		} else {
-			let inputPrompt = app.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' + 
-				app.getRawInput() + '</say-as></speak>', NO_INPUTS);
-			app.ask(inputPrompt);
+			output = "Please go on";
 		}
+		
+		app.ask(output);
 	}
 		
 		let actionMap = new Map();
